@@ -179,12 +179,13 @@ void load_mem( char *filename ){
 /* instruction fetch routine */
 
 void fetch(){
-  cache_access(mar);
+  
   mar = pc;
   mdr = mem[ mar ];
   inst_fetches++;
   ir = mdr;
   pc++;
+  cache_access(mar, 0);
 }
 
 
@@ -229,13 +230,14 @@ void sll(){
   reg[rdest] = src1_value << src2_value;
 }
 void load(){
-  cache_access(mar);
+  
   inst_number = LOAD;
   inst_count[inst_number]++;
   mar = src1_value + src2_value;
   mdr = reg[rdest];
   reg[rdest] = mem[mar];
   memory_reads++;
+  cache_access(mar, 0);
 }
 void sethi(){
   inst_number  = SETHI;
@@ -262,13 +264,14 @@ void subcc(){
 // PROGRAM 1 - fill in those missing
 
 void store(){
-  cache_access(mar, 1);
+  
   inst_number = STORE;
   inst_count[inst_number]++;
   mar = src1_value + src2_value;
   mdr = reg[rdest];
   mem[mar] = mdr;
   memory_writes++;
+  cache_access(mar, 1);
 }
 
 void hlt(){
